@@ -1,0 +1,37 @@
+# Standard Node/NPM Ausschlüsse (Übernommen und angepasst)
+node_modules/
+Client/node_modules/
+Server/node_modules/
+
+# Umgebungsvariablen (Sehr wichtig für Sicherheit)
+.env
+Client/.env
+Server/.env
+
+# Build-Ausgabe (Übernommen und angepasst)
+dist/
+dist-ssr/
+Client/dist/ 
+Server/dist/
+
+# Logs (Übernommen)
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files (Übernommen)
+.vscode/
+!.vscode/extensions.json # Ausnahme, da diese Datei oft nützliche Projekt-Empfehlungen enthält
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.local

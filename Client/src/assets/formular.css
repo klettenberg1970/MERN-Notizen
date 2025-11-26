@@ -1,0 +1,64 @@
+.formular-container {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formular-container button {
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    border-radius: 8px;
+
+    margin-top: 2rem;
+    padding: 12px 24px;
+
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+}
+
+.formular-container button:hover {
+    background-color: #333;
+    /* Etwas heller als Schwarz */
+    transform: translateY(-2px);
+    /* Leichter Lift-Effekt */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.formular {
+    width: clamp(200px, 80%, 1200px);
+    margin: auto;
+    border: 35px solid black;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.radiobuttons {
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: '30px';
+    margin-bottom: 5px
+}
+
+.kategorien {
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding:5px
+}
+
+
+.formular hr{
+
+     border: none;
+          border-top: 3px solid black;
+          margin: 20px 0
+}

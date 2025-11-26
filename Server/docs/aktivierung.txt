@@ -1,0 +1,183 @@
+# NPM Kommandobefehle - Übersicht
+
+## Projekt initialisieren und starten
+
+#### Starten mit  nodemon server.js (Server muss nicht immer neu gestartet werden)
+
+
+### `npm init -y`
+Erstellt automatisch eine package.json Datei mit Standardwerten für ein neues Node.js Projekt.
+
+### `node DATEINAME.js`
+Führt eine JavaScript-Datei direkt mit Node.js aus (z.B. `node index.js`).
+
+### NPM Scripts konfigurieren
+```json
+"scripts": {
+  "start": "node index.js"
+}
+```
+Definiert ein Start-Script in der package.json, das dann mit `npm start` ausgeführt werden kann.
+
+### `npm start`
+Führt das in der package.json definierte Start-Script aus.
+
+## Pakete installieren und verwalten
+
+### `npm install`
+Installiert alle Abhängigkeiten, die in der package.json und package-lock.json aufgelistet sind.
+
+### gemini intallieren inklusive dotenv
+
+
+### `npm install -g PAKETNAME`
+Installiert ein Paket global auf dem System (z.B. `npm install -g http-server`).
+
+### `npm uninstall -g PAKETNAME`
+Entfernt ein global installiertes Paket vom System.
+
+## Installierte Pakete anzeigen
+
+### `npm list`
+Zeigt alle lokal installierten Pakete im aktuellen Projekt an.
+
+### `npm list -g`
+Zeigt alle global installierten Pakete auf dem System an.
+
+## Entwicklungstools
+
+### `npm install -g nodemon`
+Installiert Nodemon global - ein Tool, das die Anwendung automatisch neu startet, wenn Dateien geändert werden.
+
+### Nodemon Script konfigurieren
+```json
+"scripts": {
+  "dev": "nodemon deine-app.js"
+}
+```
+Definiert ein Entwicklungs-Script mit Nodemon für automatisches Neustarten.
+
+### `npm run dev`
+Startet das Entwicklungs-Script mit Nodemon für automatisches Neuladen bei Dateiänderungen.
+
+## Beispiel-Projektstruktur
+```
+dein-projekt/
+├── views/
+│   └── index.ejs          # Template-Dateien
+├── public/
+│   └── styles.css         # Statische Dateien (CSS, Bilder)
+├── daten_funktionen.js    # Datenverarbeitung und Hilfsfunktionen
+├── app.js                 # Haupt-Anwendungsdatei
+└── package.json           # Projektmetadaten und Abhängigkeiten
+```
+
+## Weitere wichtige NPM-Befehle
+
+### Pakete installieren und hinzufügen
+
+#### `npm install PAKETNAME`
+Installiert ein Paket lokal im Projekt und fügt es zu den dependencies in package.json hinzu.
+
+#### `npm install PAKETNAME --save-dev`
+Installiert ein Paket als Entwicklungsabhängigkeit (wird nur während der Entwicklung benötigt).
+
+#### `npm install PAKETNAME@VERSION`
+Installiert eine spezifische Version eines Pakets (z.B. `npm install express@4.18.0`).
+
+### Pakete entfernen
+
+#### `npm uninstall PAKETNAME`
+Entfernt ein lokal installiertes Paket und aktualisiert die package.json automatisch.
+
+#### `npm uninstall PAKETNAME --save-dev`
+Entfernt ein Entwicklungspaket aus den devDependencies.
+
+### Informationen und Suche
+
+#### `npm info PAKETNAME`
+Zeigt detaillierte Informationen über ein Paket an (Versionen, Abhängigkeiten, etc.).
+
+#### `npm search SUCHBEGRIFF`
+Durchsucht das NPM-Registry nach Paketen mit dem angegebenen Suchbegriff.
+
+#### `npm outdated`
+Zeigt veraltete Pakete im aktuellen Projekt an und welche Updates verfügbar sind.
+
+### Updates und Wartung
+
+#### `npm update`
+Aktualisiert alle Pakete auf die neuesten Versionen entsprechend der package.json.
+
+#### `npm update PAKETNAME`
+Aktualisiert ein bestimmtes Paket auf die neueste verfügbare Version.
+
+#### `npm audit`
+Überprüft das Projekt auf bekannte Sicherheitslücken in den Abhängigkeiten.
+
+#### `npm audit fix`
+Versucht automatisch, gefundene Sicherheitslücken zu beheben.
+
+### Cache-Verwaltung
+
+#### `npm cache clean --force`
+Löscht den NPM-Cache vollständig (nützlich bei Installationsproblemen).
+
+#### `npm cache verify`
+Überprüft und bereinigt den NPM-Cache.
+
+### Konfiguration
+
+#### `npm config list`
+Zeigt alle aktuellen NPM-Konfigurationseinstellungen an.
+
+#### `npm config set SCHLÜSSEL WERT`
+Setzt eine Konfigurationsoption (z.B. `npm config set registry https://registry.npmjs.org/`).
+
+#### `npm config get SCHLÜSSEL`
+Zeigt den Wert einer bestimmten Konfigurationsoption an.
+
+### Versionen und Publishing
+
+#### `npm version patch`
+Erhöht die Patch-Version (z.B. 1.0.0 → 1.0.1) und erstellt einen Git-Commit.
+
+#### `npm version minor`
+Erhöht die Minor-Version (z.B. 1.0.0 → 1.1.0).
+
+#### `npm version major`
+Erhöht die Major-Version (z.B. 1.0.0 → 2.0.0).
+
+#### `npm publish`
+Veröffentlicht das aktuelle Paket im NPM-Registry (benötigt NPM-Account).
+
+### Scripte ausführen
+
+#### `npm run SCRIPTNAME`
+Führt ein benutzerdefiniertes Script aus der package.json aus.
+
+#### `npm run`
+Zeigt alle verfügbaren Scripts im aktuellen Projekt an.
+
+### Node.js Version Management
+
+#### `npm ls`
+Zeigt einen Baum aller installierten Pakete und deren Abhängigkeiten an.
+
+####  npm list -g --depth=0
+zeigt globale Pakete ohne Abhängigkeiten an
+
+#### `npm ls --depth=0`
+Zeigt nur die direkt installierten Pakete ohne deren Abhängigkeiten an.
+
+#### `npm prune`
+Entfernt Pakete, die in package.json nicht mehr aufgelistet sind.
+
+## Nützliche Tipps
+
+- **package.json**: Enthält Projektinformationen und Abhängigkeiten
+- **package-lock.json**: Speichert exakte Versionen aller installierten Pakete
+- **node_modules/**: Ordner mit allen installierten Paketen (nicht in Git committen)
+- **Globale vs. lokale Installation**: Globale Pakete sind systemweit verfügbar, lokale nur im jeweiligen Projekt
+- **Semantic Versioning**: NPM verwendet das Format MAJOR.MINOR.PATCH für Versionsnummern
+- **NPX**: Mit `npx PAKETNAME` können Sie Pakete ausführen, ohne sie zu installieren

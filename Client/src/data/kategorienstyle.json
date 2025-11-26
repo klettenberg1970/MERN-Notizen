@@ -1,0 +1,22 @@
+{
+    "Haushalt": {
+        "backgroundColor": "blue",
+        "color": "white"
+    },
+    "Anschaffung": {
+        "backgroundColor": "darkred",
+        "color": "white"
+    },
+    "Finanzen": {
+        "backgroundColor": "yellow",
+        "color": "black"
+    },
+    "Familie": {
+        "backgroundColor": "darkgreen",
+        "color": "white"
+    },
+    " Programmierung / KI": {
+        "backgroundColor": "darkblue",
+        "color": "white"
+    }
+}
