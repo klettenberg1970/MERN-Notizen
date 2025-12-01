@@ -81,7 +81,10 @@ export default function Notizenausgeben({ notice, onDelete, onEdit }) {
                                             <button type="submit">Speichern</button>
                                         </form>
                                     ) : (
-                                        <p>{notiz.description}</p>
+                                        <div className="description">
+                                             <p>{notiz.description}</p>
+                                        </div>
+                                       
                                     )}
                                     <div className="notizbuttons">
                                         <button onClick={() => handleDelete(notiz)}>Löschen</button>
