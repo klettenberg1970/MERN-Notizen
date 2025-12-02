@@ -8,6 +8,13 @@ Server/node_modules/
 Client/.env
 Server/.env
 
+
+
+
+
+# Nicht zum Projekt gehörende Skripte ausschließen
+Server/scripts/
+
 # Build-Ausgabe (Übernommen und angepasst)
 dist/
 dist-ssr/
