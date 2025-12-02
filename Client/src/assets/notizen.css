@@ -14,23 +14,34 @@ margin-top: 30px;
 
     width: 100%;
     height: 2rem;
-    background-color: aliceblue;
+    background-color: #334466;
+    color:white;
 }
 
 .notizbuttons {
 
     display: flex;
+    justify-content: space-between;
    
 }
 
 .notizbuttons button{
 
-    background-color: darkblue;
-    color:white
+    background-color: #334466;
+    color:white;
+    width: 10%;
+}
+
+.notizbuttons h6 {
+    /* Richtet dieses spezifische Element am unteren Rand der Flex-Zeile aus */
+    align-self: flex-end; 
+    /* Setzt das Margin des h6 auf Null, um unerwünschten Abstand zu vermeiden */
+    margin: 0; 
 }
 
 
 .description{
-    height: 50px;
-    border: 5px solid black;
+    height: 250px;
+    border: 1px solid black;
+    border-bottom: 0;
 }

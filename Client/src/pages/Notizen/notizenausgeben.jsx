@@ -10,7 +10,7 @@ export default function Notizenausgeben({ notice, onDelete, onEdit }) {
     const [isEditing, setIsEditing] = useState(false);
 
     const farben = Farbarray();
-   
+
 
     const handleDelete = (notiz) => {
         onDelete(notiz); // ✅ Wichtig: An Parent weitergeben!
@@ -50,7 +50,7 @@ export default function Notizenausgeben({ notice, onDelete, onEdit }) {
                     <button
                         onClick={() => togglekatbearbeiten(kategorie)}
                         style={{
-                            backgroundColor: farben[index] ,
+                            backgroundColor: farben[index],
                             color: "black"
                         }}
                     >
@@ -72,8 +72,8 @@ export default function Notizenausgeben({ notice, onDelete, onEdit }) {
                                     display: titleausklappen === notiz.id ? 'block' : 'none',
                                     border: "1px solid black"
                                 }}>
-                                    <h6>{notiz.date}</h6>
-                                    <hr />
+
+
 
                                     {isEditing ? (
                                         <form onSubmit={(e) => handleSubmit(e, notiz.id)}>  {/* ✅ ID übergeben */}
@@ -82,12 +82,13 @@ export default function Notizenausgeben({ notice, onDelete, onEdit }) {
                                         </form>
                                     ) : (
                                         <div className="description">
-                                             <p>{notiz.description}</p>
+                                            <p>{notiz.description}</p>
                                         </div>
-                                       
+
                                     )}
                                     <div className="notizbuttons">
                                         <button onClick={() => handleDelete(notiz)}>Löschen</button>
+                                        <h6>{notiz.date}</h6>
                                         <button onClick={handleedit}>Bearbeiten</button>
 
                                     </div>
