@@ -3,7 +3,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
+
 
 .formular-container button {
     background-color: #006EA1;
@@ -11,7 +14,7 @@
     border: 1px solid black;
     border-radius: 8px;
 
-    margin-top: 2rem;
+    
     padding: 12px 24px;
 
     font-size: 16px;
@@ -61,4 +64,9 @@
      border: none;
           border-top: 3px solid black;
           margin: 20px 0
+}
+
+.formularlabel{
+    padding: 5px;
+    margin-bottom: 10px;
 }

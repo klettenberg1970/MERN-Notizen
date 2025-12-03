@@ -60,23 +60,26 @@ export default function NotizenAdd({ notice, onAdd }) {
           <hr style={{
             borderTop: "1px solid grey"
           }} />
-          <label htmlFor="neuRadio"> Neu:</label>
+          <label htmlFor="neuRadio" className="formularlabel"> Neu:  </label>
           {/* Radio-Button für neue Kategorie */}
-          <input type="radio" name="category" value="new" id="neuRadio" />
+          <input type="radio" name="category" value="new" id="neuRadio" style ={{
+            marginLeft:"5px",
+            marginRight:"1rem"
+          }} />
           {/* Textfeld für Namen der neuen Kategorie */}
           <input type="text" name="newCategory" id="neuInput" placeholder="Bitte neue Kategorie eingeben" />
           <hr />
         </div>
       
         {/* Titel-Eingabe */}
-        <label htmlFor="title">Titel:</label>
+        <label htmlFor="title"  className="formularlabel">Titel:</label>
         <input type="text" name="title" id="title" placeholder="Bitte neuen Titel eingeben" />
 
         <hr />
 
         {/* Beschreibung-Eingabe */}
-        <label htmlFor="beschreibung">Beschreibung:</label>
-        <textarea name="description" id="beschreibung" rows="7" placeholder="Bitte Beschreibung eingeben" ></textarea>
+        <label htmlFor="beschreibung" className="formularlabel">Beschreibung:</label>
+        <textarea name="description" id="beschreibung" rows="9" placeholder="Bitte Beschreibung eingeben" ></textarea>
 
         {/* Submit-Button */}
         <button type="submit">Hinzufügen</button>
