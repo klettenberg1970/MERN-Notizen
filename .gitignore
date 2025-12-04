@@ -14,7 +14,7 @@ Server/.env
 
 # Nicht zum Projekt gehörende Skripte ausschließen
 Server/scripts/
-Server/docs
+Server/docs/
 
 # Build-Ausgabe (Übernommen und angepasst)
 dist/
