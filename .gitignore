@@ -6,6 +6,7 @@ Server/node_modules/
 # Umgebungsvariablen (Sehr wichtig für Sicherheit)
 .env
 Client/.env
+Client/env.local
 Server/.env
 
 

@@ -1,11 +1,11 @@
 
 
- export function Farbarray (){
-let farbarray =[]
-for (const element of Object.values( kaltesBlau))
+export function Farbarray() {
+  let farbarray = []
+  for (const element of Object.values(kaltesBlau))
     farbarray.push(element)
-return farbarray
- }
+  return farbarray
+}
 
 
 
@@ -29,27 +29,27 @@ const kaltesBlau = {
   "Eisblau": "#E6F4FF",
   "Polarluft": "#DEF0FF",
   "Polarblau": "#C8E8FF",
-  
+
   // Mittlere helle Töne
   "Morgentau": "#B5E1FF",
   "Frostblau": "#9DD4FF",
   "Gletschersee": "#76C3FF",
   "Azurblau": "#5FB6FF",
   "HimmelblauKalt": "#4AAFFF",
-  
+
   // Mittlere intensive Töne
   "Polarnacht": "#2FA2FF",
   "Arktisblau": "#1C94FF",
   "EisblauIntensiv": "#0085FF",
   "KobaltblauHell": "#006FDB",
-  
+
   // Dunklere Töne
   "Nordlichtblau": "#0062C4",
   "Kobaltblau": "#005BB5",
   "Tiefenblau": "#004B9C",
   "Meeresblau": "#004085",
   "Tiefseeblau": "#003E73",
-  
+
   // Sehr dunkle Töne
   "Abendblau": "#002F5C",
   "Mitternachtsblau": "#001F3F",
