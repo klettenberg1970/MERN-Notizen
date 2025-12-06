@@ -8,13 +8,16 @@ export default function LoggingFormular() {
   const [password, setPassword] = useState('');
   const [fehler, setFehler] = useState('');
 
-  // handleLogin DIREKT in der Komponente, NICHT in useEffect!
+  // Lese die Base URL aus der Umgebungsvariable
+  const API_URL = import.meta.env.VITE_API_URL; 
+
   const handleLogin = async (e) => {
     e.preventDefault();
     console.log(username, password);
     
     try {
-      const response = await fetch('http://localhost:5000/api/login', {
+      // FEHLER BEHOBEN: Wir verwenden jetzt die Variable API_URL anstelle von 'http://localhost:5000'
+      const response = await fetch(`${API_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -26,12 +29,9 @@ export default function LoggingFormular() {
       const data = await response.json();
       console.log("Antwort vom Server:", data);
       
-      // WICHTIG: Jetzt prüfst du die SERVER-Antwort, nicht mehr React!
       if (response.ok) {
-        // Server sagt: Login OK
         navigate('/notizen');
       } else {
-        // Server sagt: Login falsch
         setFehler(data.message || 'Falscher Benutzername oder Passwort!');
         setUsername('');
         setPassword('');
