@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom"; // ✅ NEU: useLocation importiert
 import Notizenausgeben from "./notizenausgeben";
 import NotizenAdd from "./notizenAdd";
 
@@ -9,9 +10,17 @@ import '../../assets/notizen.css';
 const API = import.meta.env.VITE_API_URL;
 
 export default function Notizen() {
+    // Hooks zum Abrufen des Navigations-States
+    const location = useLocation(); // ✅ NEU: Hook verwenden
+
+    // Initialer Benutzername wird aus dem Navigations-State gelesen
+    // (wird gesetzt, wenn man von LoggingFormular kommt)
+    const initialUsername = location.state?.loggedInUser || ''; 
+
     // States für Daten und Benutzer
     const [notice, setNotice] = useState([]);
-    const [username, setUsername] = useState('');
+    // ✅ NEU: username State mit dem initialen Wert aus dem Navigations-State setzen
+    const [username, setUsername] = useState(initialUsername); 
 
     // **Helper-Funktion für die Fetch-Optionen**
     // Wird für alle Anfragen benötigt, die Autorisierung erfordern (Cookie-Übertragung)
@@ -22,16 +31,18 @@ export default function Notizen() {
             // AUTORISIERUNG: Cookies mitsenden
             const response = await fetch(`${API}/api/notes`, fetchOptions);
             
+            // ... (Rest der Fehlerbehandlung bleibt gleich)
             if (response.status === 401) {
                 // Wenn der Server 401 (Unauthorized) zurückgibt (z.B. Cookie abgelaufen)
-                setUsername('Gast (Bitte neu einloggen)');
+                // Wir verwenden hier 'Gast', da der Navigations-State nur einmal gesetzt wird
+                setUsername(location.state?.loggedInUser ? location.state.loggedInUser + ' (Session abgelaufen)' : 'Gast (Bitte neu einloggen)'); 
                 setNotice([]); // Leere Notizen, da nicht autorisiert
                 return;
             }
 
             const result = await response.json(); 
             
-            // 1. Benutzernamen speichern
+            // 1. Benutzernamen speichern (Falls das Cookie doch funktioniert, wird dieser Wert übernommen)
             if (result.username) {
                 setUsername(result.username);
             }
@@ -50,9 +61,13 @@ export default function Notizen() {
         }
     };
 
+    // Zusätzlicher useEffect-Hook, um den Benutzernamen sofort zu setzen, wenn er über den State kommt
     useEffect(() => {
+        if (location.state?.loggedInUser && username !== location.state.loggedInUser) {
+            setUsername(location.state.loggedInUser);
+        }
         loadNotizen();
-    }, []);
+    }, [location.state?.loggedInUser]); // Lädt Notizen beim ersten Rendern und wenn der Benutzer sich einloggt
 
     // **Hinzufügen einer Notiz (POST)**
     const handleDatafromChild = async (data) => {
