@@ -16,20 +16,22 @@ export default function LoggingFormular() {
     console.log(username, password);
     
     try {
-      // FEHLER BEHOBEN: Wir verwenden jetzt die Variable API_URL anstelle von 'http://localhost:5000'
       const response = await fetch(`${API_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: username,
           password: password
-        })
+        }),
+        // 🚨 WICHTIG: Erlaubt dem Browser, Cookies an den Server zu senden und empfangene Cookies (vom Backend gesetzt) zu speichern.
+        credentials: 'include' 
       });
       
       const data = await response.json();
       console.log("Antwort vom Server:", data);
       
       if (response.ok) {
+        // Nach erfolgreicher Login-Antwort navigieren, die Cookies sollten jetzt gesetzt sein.
         navigate('/notizen');
       } else {
         setFehler(data.message || 'Falscher Benutzername oder Passwort!');

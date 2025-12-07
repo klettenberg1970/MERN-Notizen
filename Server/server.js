@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
+import cookieParser from 'cookie-parser';
 
 import connectDB from './config/db.js';
 
@@ -40,7 +41,7 @@ app.use(cors(corsOptions));
 
 
 app.use(express.json());
-
+app.use(cookieParser());
 
 app.use('/api/login', logginRoutes); 
 app.use('/api/notes', noteRoutes); 

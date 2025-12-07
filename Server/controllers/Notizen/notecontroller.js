@@ -2,13 +2,31 @@ import Note from "../../models/notizen.js";
 import { NoteObject } from "./noteobject.js";
 
 export const getNotizen = async (req, res) => {
-  try {
-    const notes = await Note.find(); 
-    const notizen = await NoteObject(notes);
-    res.json(notizen);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+    try {
+        // NEU: Benutzernamen aus dem Cookie lesen
+        const username = req.cookies.user;
+
+        if (!username) {
+            // Wenn der Benutzer-Cookie fehlt (nicht eingeloggt), brechen wir ab.
+            return res.status(401).json({ message: "Nicht autorisiert. Bitte einloggen." });
+        }
+        
+        console.log(`Notizen werden für Benutzer: ${username} abgerufen.`);
+
+        // Später: Filtern Sie die Notizen nach dem Benutzer (z.B. Note.find({ owner: username }))
+        const notes = await Note.find(); 
+        const notizen = await NoteObject(notes);
+        
+        // NEU: Senden Sie den Benutzernamen zusammen mit den Notizen zurück
+        res.json({
+            notizen: notizen,
+            // Der Benutzername ist für das Frontend verfügbar, um ihn anzuzeigen.
+            username: username 
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 };
 
 export const createNotizen = async (req, res) => {
