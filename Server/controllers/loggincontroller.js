@@ -10,15 +10,17 @@ export async function checkPassword(req, res) {
             // NEU: Cookie setzen
             // Wir verwenden 'res.cookie(name, wert, optionen)'
             res.cookie('user', username, {
-                httpOnly: true,        // Cookie ist nur über HTTP/S zugänglich (wichtig für Sicherheit)
-                maxAge: 1000 * 60 * 60 * 24, // Ablauf nach 24 Stunden (optional)
-                secure: process.env.NODE_ENV === 'production', // Cookie nur über HTTPS senden (auf Render aktiv)
-                sameSite: 'Lax',       // Schutz vor CSRF-Angriffen
+                httpOnly: true,        
+                maxAge: 1000 * 60 * 60 * 24, 
+                secure: process.env.NODE_ENV === 'production', 
+                // 🚨 KORREKTUR für Live-Deployment auf Render-Subdomains:
+                // Setzt SameSite auf 'None', damit Cookies über die Domaingrenze (notizen.onrender.com -> mern-notizen.onrender.com) gesendet werden können.
+                // ACHTUNG: 'secure: true' ist zwingend erforderlich, wenn sameSite: 'None' gesetzt wird.
+                sameSite: 'None',       
             });
 
             res.json({
                 message: 'Login erfolgreich',
-                // Optional: Senden Sie den Benutzernamen auch in der JSON-Antwort
                 username: username 
             });
         } else {
