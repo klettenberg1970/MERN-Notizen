@@ -12,7 +12,8 @@ dotenv.config();
 connectDB(); // mit MongoDB verbinden
 
 const app = express();
-// app.use(cors());  
+
+// --- Konfiguration für Cross-Origin Resource Sharing (CORS) ---
 
 // Definieren Sie die erlaubten Ursprünge
 const allowedOrigins = [
@@ -33,18 +34,20 @@ const corsOptions = {
             callback(new Error('Not allowed by CORS'));
         }
     },
-    // Wichtig, falls Sie Cookies, Authentifizierungs-Header oder Sitzungen verwenden
+    // 🚨 WICHTIG: Erlaubt das Senden und Empfangen von Cookies/Credentials über Domains hinweg.
     credentials: true 
 };
 
+// CORS Middleware anwenden
 app.use(cors(corsOptions));
 
+// --- Middleware und Routen ---
 
-app.use(express.json());
-app.use(cookieParser());
+app.use(express.json()); // Erlaubt das Parsen von JSON im Request Body
+app.use(cookieParser()); // Erlaubt das Parsen von Cookies aus dem Request Header
 
 app.use('/api/login', logginRoutes); 
 app.use('/api/notes', noteRoutes); 
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
+app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));v
