@@ -5,7 +5,7 @@ export async function checkPassword(req, res) {
         const { username, password } = req.body;
 
         // Hier die Überprüfung (später mit Datenbank)
-        if (username === 'Stefan' && password === '123') {
+        if ((username === 'Stefan' || username === 'stefan') && password === '123') {
             
             // NEU: Cookie setzen
             // Wir verwenden 'res.cookie(name, wert, optionen)'
