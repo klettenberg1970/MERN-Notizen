@@ -13,9 +13,7 @@ export async function checkPassword(req, res) {
                 httpOnly: true,        
                 maxAge: 1000 * 60 * 60 * 24, 
                 secure:  true, 
-                // 🚨 KORREKTUR für Live-Deployment auf Render-Subdomains:
-                // Setzt SameSite auf 'None', damit Cookies über die Domaingrenze (notizen.onrender.com -> mern-notizen.onrender.com) gesendet werden können.
-                // ACHTUNG: 'secure: true' ist zwingend erforderlich, wenn sameSite: 'None' gesetzt wird.
+                
                 sameSite: 'None',       
             });
 
