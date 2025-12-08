@@ -1,5 +1,5 @@
 import express from 'express';
-import { checkPassword } from '../controllers/loggincontroller.js';
+import { checkPassword } from '../controllers/Loggin/loggincontroller.js';
 
 const router = express.Router();
 
