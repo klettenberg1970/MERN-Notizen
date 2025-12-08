@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; // ✅ NEU: useLocation importiert
+import { useLocation } from "react-router-dom"; 
 import Notizenausgeben from "./notizenausgeben";
 import NotizenAdd from "./notizenAdd";
 
@@ -11,19 +11,16 @@ const API = import.meta.env.VITE_API_URL;
 
 export default function Notizen() {
     // Hooks zum Abrufen des Navigations-States
-    const location = useLocation(); // ✅ NEU: Hook verwenden
-
-    // Initialer Benutzername wird aus dem Navigations-State gelesen
-    // (wird gesetzt, wenn man von LoggingFormular kommt)
+    const location = useLocation(); 
+    
+    // Initialer Benutzername aus dem Navigations-State holen (von LoggingFormular gesendet)
     const initialUsername = location.state?.loggedInUser || ''; 
 
     // States für Daten und Benutzer
     const [notice, setNotice] = useState([]);
-    // ✅ NEU: username State mit dem initialen Wert aus dem Navigations-State setzen
     const [username, setUsername] = useState(initialUsername); 
 
     // **Helper-Funktion für die Fetch-Optionen**
-    // Wird für alle Anfragen benötigt, die Autorisierung erfordern (Cookie-Übertragung)
     const fetchOptions = { credentials: 'include' };
 
     const loadNotizen = async () => {
@@ -31,18 +28,16 @@ export default function Notizen() {
             // AUTORISIERUNG: Cookies mitsenden
             const response = await fetch(`${API}/api/notes`, fetchOptions);
             
-            // ... (Rest der Fehlerbehandlung bleibt gleich)
             if (response.status === 401) {
-                // Wenn der Server 401 (Unauthorized) zurückgibt (z.B. Cookie abgelaufen)
-                // Wir verwenden hier 'Gast', da der Navigations-State nur einmal gesetzt wird
-                setUsername(location.state?.loggedInUser ? location.state.loggedInUser + ' (Session abgelaufen)' : 'Gast (Bitte neu einloggen)'); 
-                setNotice([]); // Leere Notizen, da nicht autorisiert
+                // Wenn der Server 401 zurückgibt (z.B. Session abgelaufen)
+                setUsername('Gast (Bitte neu einloggen)'); 
+                setNotice([]); 
                 return;
             }
 
             const result = await response.json(); 
             
-            // 1. Benutzernamen speichern (Falls das Cookie doch funktioniert, wird dieser Wert übernommen)
+            // 1. Benutzernamen speichern (wird auch verwendet, wenn das Cookie funktioniert)
             if (result.username) {
                 setUsername(result.username);
             }
@@ -51,7 +46,6 @@ export default function Notizen() {
             if (result.notizen) {
                 setNotice(result.notizen);
             } else {
-                 // Fängt den Fall ab, dass die Antwortstruktur nicht wie erwartet ist
                  console.error("Fehler: Unerwartete Datenstruktur vom Server.");
                  setNotice([]);
             }
@@ -61,13 +55,31 @@ export default function Notizen() {
         }
     };
 
-    // Zusätzlicher useEffect-Hook, um den Benutzernamen sofort zu setzen, wenn er über den State kommt
+    // 🚨 KORRIGIERTER EFFECT FÜR MOBILE TIMING:
     useEffect(() => {
-        if (location.state?.loggedInUser && username !== location.state.loggedInUser) {
-            setUsername(location.state.loggedInUser);
+        
+        // Timeout-ID zur späteren Bereinigung speichern
+        let timeoutId;
+
+        // Wir prüfen, ob wir gerade vom Login kommen ODER ob der Benutzername bereits bekannt ist.
+        // Die Verzögerung ist nur beim initialen Laden nach dem Login notwendig.
+        if (initialUsername || username) {
+            
+            // ✅ Die Verzögerung von 500ms gibt mobilen Browsern Zeit, 
+            // das SameSite: 'None' Cookie sicher zu verarbeiten.
+            timeoutId = setTimeout(() => {
+                loadNotizen(); 
+            }, 500); 
+
+        } else {
+            // Wenn der Benutzer bereits auf der Seite ist und kein State übergeben wurde (z.B. direktes Aufrufen der URL)
+            loadNotizen(); 
         }
-        loadNotizen();
-    }, [location.state?.loggedInUser]); // Lädt Notizen beim ersten Rendern und wenn der Benutzer sich einloggt
+
+        // Cleanup-Funktion: Stoppt den Timer, falls die Komponente unmounted wird
+        return () => clearTimeout(timeoutId);
+
+    }, [initialUsername]); // Abhängigkeit von initialUsername, damit der Timer nur beim ersten Login triggert
 
     // **Hinzufügen einer Notiz (POST)**
     const handleDatafromChild = async (data) => {
@@ -115,7 +127,7 @@ export default function Notizen() {
     return (
         <div className="maincontainer">
             
-            <h1 className="begruessung"> Notizen von {username || 'Gast'}</h1> {/* Anzeige des Benutzernamens */}
+            <h1 className="begruessung"> Notizen von {username || 'Gast'}</h1>
             
             <Notizenausgeben
                 notice={notice}
