@@ -1,15 +1,28 @@
+
+img {
+    width: 50%;
+    margin-top: 2rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
 .loggingcontainer {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 25%;
+    width: 30%;
     margin: auto;
-    margin-top: 30vh;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     width: clamp(100px, 80%, 900px);
    
-    border: 2px solid rgb(96 139 168);
+    border: 2px solid  #334466;
 }
+
 
 
 .loggingcontainer form {
