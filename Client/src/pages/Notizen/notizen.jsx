@@ -70,7 +70,7 @@ export default function Notizen() {
             // das SameSite: 'None' Cookie sicher zu verarbeiten.
             timeoutId = setTimeout(() => {
                 loadNotizen(); 
-            }, 500); 
+            }, 1000); 
 
         } else {
             // Wenn der Benutzer bereits auf der Seite ist und kein State übergeben wurde (z.B. direktes Aufrufen der URL)

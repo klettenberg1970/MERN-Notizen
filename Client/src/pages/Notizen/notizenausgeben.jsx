@@ -77,8 +77,12 @@ export default function Notizenausgeben({ notice, onDelete, onEdit }) {
 
                                     {isEditing ? (
                                         <form onSubmit={(e) => handleSubmit(e, notiz.id)}>  {/* ✅ ID übergeben */}
-                                            <textarea name="description" defaultValue={notiz.description}></textarea>
-                                            <button type="submit">Speichern</button>
+                                            <textarea name="description" defaultValue={notiz.description} ></textarea>
+                                            <button type="submit" style={{
+                                                backgroundColor:"aliceblue",
+                                                color:"black",
+                                               
+                                            }}>Speichern</button>
                                         </form>
                                     ) : (
                                         <div className="description">

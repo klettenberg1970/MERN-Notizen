@@ -24,6 +24,11 @@ margin-top: 30px;
     color:white;
 }
 
+.card textarea {
+    
+    height: 250px;
+    width: 100%;
+}
 .notizbuttons {
 
     display: flex;
