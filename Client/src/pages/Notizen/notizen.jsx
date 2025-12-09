@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom"; 
 import Notizenausgeben from "./notizenausgeben";
 import NotizenAdd from "./notizenAdd";
+import Ausloggen from "./ausloggen";
 
 import '../../assets/formular.css';
 import '../../assets/notizen.css';
@@ -139,6 +140,8 @@ export default function Notizen() {
                 notice={notice}
                 onAdd={handleDatafromChild}
             />
+
+            <Ausloggen/>
         </div>
     );
 }

@@ -1,9 +1,10 @@
 import express from 'express';
-import { checkPassword } from '../controllers/Loggin/loggincontroller.js';
+import { checkPassword ,loggout} from '../controllers/Loggin/loggincontroller.js';
 
 const router = express.Router();
 
 
 router.post('/', checkPassword); 
+router.post('/out',loggout)
 
 export default router;

@@ -33,3 +33,32 @@ export async function checkPassword(req, res) {
         });
     }
 }
+
+
+export async function loggout(req, res) {
+    console.log("Es wird ausgeloggt (Backend)");
+    
+    try {
+        // 1. **Cookie löschen**
+        // res.clearCookie(Name des Cookies, Optionen)
+        // WICHTIG: Die Optionen (secure, sameSite) MÜSSEN mit denen übereinstimmen, 
+        // die beim Setzen des Cookies verwendet wurden!
+        res.clearCookie('user', {
+            httpOnly: true,        
+            secure: true, 
+            sameSite: 'None', 
+        });
+
+        // 2. **Erfolgsbestätigung senden**
+        // Wir senden eine 200er-Antwort zurück an das Frontend
+        res.status(200).json({
+            message: 'Erfolgreich abgemeldet. Cookie gelöscht.'
+        });
+
+    } catch (error) {
+        console.error('Fehler beim Logout-Controller:', error);
+        res.status(500).json({
+            message: 'Serverfehler beim Logout'
+        });
+    }
+}
