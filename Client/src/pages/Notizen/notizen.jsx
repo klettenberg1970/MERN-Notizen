@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom"; 
+// import { useLocation } from "react-router-dom"; // Nicht mehr benötigt
 import Notizenausgeben from "./notizenausgeben";
 import NotizenAdd from "./notizenAdd";
 import Ausloggen from "./ausloggen";
@@ -11,17 +11,13 @@ import '../../assets/notizen.css';
 const API = import.meta.env.VITE_API_URL;
 
 export default function Notizen() {
-    // Hooks zum Abrufen des Navigations-States
-    const location = useLocation(); 
-    
-    // Initialer Benutzername aus dem Navigations-State holen (von LoggingFormular gesendet)
-    const initialUsername = location.state?.loggedInUser || ''; 
-
     // States für Daten und Benutzer
     const [notice, setNotice] = useState([]);
-    const [username, setUsername] = useState(initialUsername); 
+    
+    // 🚨 KORREKTUR: Standard-Benutzername "Stefan" oder "Gast" (falls der Cookie-Abruf fehlschlägt)
+    const [username, setUsername] = useState('Stefan'); 
 
-    // **Helper-Funktion für die Fetch-Optionen**
+    // Helper-Funktion für die Fetch-Optionen (Cookies mitsenden)
     const fetchOptions = { credentials: 'include' };
 
     const loadNotizen = async () => {
@@ -29,21 +25,22 @@ export default function Notizen() {
             // AUTORISIERUNG: Cookies mitsenden
             const response = await fetch(`${API}/api/notes`, fetchOptions);
             
+            // Fehlerbehandlung: Wenn 401 kommt, wird der statische Name beibehalten
             if (response.status === 401) {
-                // Wenn der Server 401 zurückgibt (z.B. Session abgelaufen)
-                setUsername('Gast (Bitte neu einloggen)'); 
+                console.warn("401 erhalten. Keine Cookie-Autorisierung gefunden.");
                 setNotice([]); 
+                // Der username bleibt hier "Stefan"
                 return;
             }
 
             const result = await response.json(); 
             
-            // 1. Benutzernamen speichern (wird auch verwendet, wenn das Cookie funktioniert)
+            // 1. Benutzernamen speichern (Wird nur ausgeführt, wenn das Cookie vom Server erkannt wurde)
             if (result.username) {
                 setUsername(result.username);
             }
             
-            // 2. Notizen speichern (wir erwarten das Feld 'notizen')
+            // 2. Notizen speichern
             if (result.notizen) {
                 setNotice(result.notizen);
             } else {
@@ -56,31 +53,11 @@ export default function Notizen() {
         }
     };
 
-    // 🚨 KORRIGIERTER EFFECT FÜR MOBILE TIMING:
+    // 🚨 KORRIGIERTER EFFECT: Sofortiger, einmaliger Aufruf beim Laden
     useEffect(() => {
+        loadNotizen(); 
         
-        // Timeout-ID zur späteren Bereinigung speichern
-        let timeoutId;
-
-        // Wir prüfen, ob wir gerade vom Login kommen ODER ob der Benutzername bereits bekannt ist.
-        // Die Verzögerung ist nur beim initialen Laden nach dem Login notwendig.
-        if (initialUsername || username) {
-            
-            // ✅ Die Verzögerung von 500ms gibt mobilen Browsern Zeit, 
-            // das SameSite: 'None' Cookie sicher zu verarbeiten.
-            timeoutId = setTimeout(() => {
-                loadNotizen(); 
-            }, 1000); 
-
-        } else {
-            // Wenn der Benutzer bereits auf der Seite ist und kein State übergeben wurde (z.B. direktes Aufrufen der URL)
-            loadNotizen(); 
-        }
-
-        // Cleanup-Funktion: Stoppt den Timer, falls die Komponente unmounted wird
-        return () => clearTimeout(timeoutId);
-
-    }, [initialUsername]); // Abhängigkeit von initialUsername, damit der Timer nur beim ersten Login triggert
+    }, []); // Lädt nur einmal beim Starten der Komponente
 
     // **Hinzufügen einer Notiz (POST)**
     const handleDatafromChild = async (data) => {
@@ -88,7 +65,7 @@ export default function Notizen() {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
-            ...fetchOptions // AUTORISIERUNG: Cookies mitsenden
+            ...fetchOptions // Cookies mitsenden
         });
 
         if (response.ok) {
@@ -103,7 +80,7 @@ export default function Notizen() {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ neueBeschreibung, notizId }),
-            ...fetchOptions // AUTORISIERUNG: Cookies mitsenden
+            ...fetchOptions // Cookies mitsenden
         });
 
         if (response.ok) {
@@ -116,7 +93,7 @@ export default function Notizen() {
     const handleDeleteFromChild = async (notiz) => {
         const response = await fetch(`${API}/api/notes/delete/${notiz.id}`, {
             method: 'DELETE',
-            ...fetchOptions // AUTORISIERUNG: Cookies mitsenden
+            ...fetchOptions // Cookies mitsenden
         });
 
         if (response.ok) {
@@ -128,7 +105,8 @@ export default function Notizen() {
     return (
         <div className="maincontainer">
             
-            <h1 className="begruessung"> Notizen von {username || 'Gast'}</h1>
+            {/* 🚨 KORREKTUR: Zeigt den gesetzten Namen "Stefan" an */}
+            <h1 className="begruessung"> Notizen von {username}</h1>
             
             <Notizenausgeben
                 notice={notice}
