@@ -1,68 +1,82 @@
 import Note from "../../models/notizen.js"; 
 import { NoteObject } from "./noteobject.js";
 
+// **1. NOTIZEN ABRUFEN (GET /api/notes)**
 export const getNotizen = async (req, res) => {
     try {
-        // NEU: Benutzernamen aus dem Cookie lesen
-        const username = req.cookies.user;
-
-        if (!username) {
-            // Wenn der Benutzer-Cookie fehlt (nicht eingeloggt), brechen wir ab.
-            return res.status(401).json({ message: "Nicht autorisiert. Bitte einloggen." });
-        }
+        // Keine Authentifizierungsprüfung mehr
         
-        console.log(`Notizen werden für Benutzer: ${username} abgerufen.`);
+        console.log(`Notizen werden für ALLE Benutzer abgerufen (Unautorisiert).`);
 
-        // Später: Filtern Sie die Notizen nach dem Benutzer (z.B. Note.find({ owner: username }))
+        // Holt ALLE Notizen aus der Datenbank
         const notes = await Note.find(); 
+        
+        // Verarbeitet die Notizen in das gewünschte Format (z.B. Gruppierung nach Kategorie)
         const notizen = await NoteObject(notes);
         
-        // NEU: Senden Sie den Benutzernamen zusammen mit den Notizen zurück
+        // Gibt die Notizen zurück
         res.json({
             notizen: notizen,
-            // Der Benutzername ist für das Frontend verfügbar, um ihn anzuzeigen.
-            username: username 
         });
 
     } catch (err) {
+        // Bei Datenbank- oder Serverfehlern
         res.status(500).json({ message: err.message });
     }
 };
 
+// **2. NOTIZEN ERSTELLEN (POST /api/notes/add)**
 export const createNotizen = async (req, res) => {
-  let { category, title, description, newCategory } = req.body;
-  
-  if (category === "new") {
-    category = newCategory;
-  }
-  
-  try {
-    const note = await Note.create({ category, title, description });
-    res.status(201).json(note);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
+    let { category, title, description, newCategory } = req.body;
+    
+    // Logik zur Behandlung neuer Kategorien
+    if (category === "new") {
+        category = newCategory;
+    }
+    
+    try {
+        // Speichert die neue Notiz in der Datenbank
+        const note = await Note.create({ category, title, description });
+        res.status(201).json(note); // 201 Created
+    } catch (err) {
+        res.status(400).json({ message: err.message }); // 400 Bad Request bei Validierungsfehlern
+    }
 };
 
+// **3. NOTIZEN LÖSCHEN (DELETE /api/notes/delete/:id)**
 export const deleteNotizen = async(req, res) => {
     const { id } = req.params;
     console.log("Lösche Notiz mit ID:", id);
     
-    const note = await Note.findByIdAndDelete(id);
-    res.status(200).json(note);
+    try {
+        const note = await Note.findByIdAndDelete(id);
+        
+        if (!note) {
+            return res.status(404).json({ message: "Notiz nicht gefunden." });
+        }
+        
+        res.status(200).json(note); // 200 OK
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 }
 
+// **4. NOTIZEN BEARBEITEN (PUT /api/notes/edit)**
 export const editNotizen = async (req, res) => {
-  const { neueBeschreibung, notizId } = req.body;
-  
-  // Nur updaten ohne Rückgabe
-  await Note.findByIdAndUpdate(notizId, {
-    description: neueBeschreibung.description 
-  });
-  
-  // Direkt gruppierte Daten zurückgeben
-  const allNotes = await Note.find();
-  const groupedNotes = await NoteObject(allNotes);
-  
-  res.status(200).json(groupedNotes);
+    const { neueBeschreibung, notizId } = req.body;
+    
+    try {
+        // Aktualisiert die Beschreibung
+        await Note.findByIdAndUpdate(notizId, {
+            description: neueBeschreibung.description 
+        });
+        
+        // Holt die vollständige, aktualisierte Liste zur sofortigen Anzeige im Frontend
+        const allNotes = await Note.find();
+        const groupedNotes = await NoteObject(allNotes);
+        
+        res.status(200).json(groupedNotes);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
 }
